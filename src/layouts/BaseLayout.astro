@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { withBase } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -9,11 +10,11 @@ interface Props {
 const { title, description = 'Personal golf practice notes and daily drills.' } = Astro.props;
 
 const nav = [
-  { href: '/', label: 'Home', icon: '🏠' },
-  { href: '/drills/', label: 'Drills', icon: '🔁' },
-  { href: '/long-game/', label: 'Long', icon: '🏌️' },
-  { href: '/short-game/', label: 'Short', icon: '⛳' },
-  { href: '/putting/', label: 'Putt', icon: '🥅' },
+  { href: withBase(''), label: 'Home', icon: '🏠' },
+  { href: withBase('drills/'), label: 'Drills', icon: '🔁' },
+  { href: withBase('long-game/'), label: 'Long', icon: '🏌️' },
+  { href: withBase('short-game/'), label: 'Short', icon: '⛳' },
+  { href: withBase('putting/'), label: 'Putt', icon: '🥅' },
 ];
 
 // Normalise the current path (with or without trailing slash) for active matching.
@@ -27,7 +28,7 @@ const isActive = (href: string) => (href.replace(/\/+$/, '') || '/') === current
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
     <title>{title}</title>
   </head>
   <body class="min-h-screen bg-base-200">

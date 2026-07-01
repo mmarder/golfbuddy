@@ -16,9 +16,14 @@ accounts, no personal data.
 
 **Deployment:** GitHub Pages, built and deployed by the GitHub Actions workflow in
 `.github/workflows/deploy.yml` (push to `main` → build with `withastro/action` → deploy to Pages).
-**Live URL:** https://golf.mardr.com — custom subdomain via `public/CNAME` + a Namecheap DNS record
-(`golf` CNAME → `mmarder.github.io`). **DNS record + enabling Pages in repo settings still to be
-done** (see Known Issues).
+Pages is enabled with Source = GitHub Actions.
+**Live URL:** https://mmarder.github.io/golfbuddy/ (project Pages). Served from the `/golfbuddy`
+subpath, so `astro.config.mjs` sets `base: '/golfbuddy'` and internal links go through
+`withBase()` (`src/lib/paths.ts`).
+**Custom domain (deferred):** `golf.mardr.com` is planned but not set up yet. To switch: set
+`site: 'https://golf.mardr.com'`, remove `base` from `astro.config.mjs`, re-add `public/CNAME`
+containing `golf.mardr.com`, and add a Namecheap DNS record (`golf` CNAME → `mmarder.github.io`).
+`withBase()` makes the link changes automatic.
 **Repo:** https://github.com/mmarder/golfbuddy
 **Data store:** None. Fully static. The only per-device state is the Daily Drills checklist, stored
 in the browser's `localStorage` under key `golfbuddy.drills` (functional state only — no PII).
@@ -66,8 +71,7 @@ golfbuddy/
 ├── package.json                  # scripts: dev / build / preview / test / check
 ├── .github/workflows/deploy.yml  # build + deploy to GitHub Pages
 ├── public/
-│   ├── CNAME                     # golf.mardr.com
-│   └── favicon.svg
+│   └── favicon.svg               # (CNAME re-added here when the custom domain is set up)
 └── src/
     ├── content.config.ts         # content collections: `areas` (glob md) + `drills` (json)
     ├── content/
@@ -79,7 +83,9 @@ golfbuddy/
     │   └── Checklist.astro       # interactive checklist (localStorage + reset) + client script
     ├── lib/
     │   ├── checklist-state.ts    # PURE logic (toggle/progress/serialize/deserialize/reset)
-    │   └── checklist-state.test.ts
+    │   ├── checklist-state.test.ts
+    │   ├── paths.ts              # PURE withBase() — prefixes internal links with Astro base
+    │   └── paths.test.ts
     ├── pages/
     │   ├── index.astro           # home hub (cards → drills + 3 areas)
     │   ├── drills.astro          # renders <Checklist>
@@ -161,9 +167,9 @@ None required (static build, no secrets).
 
 ## 11. Known Issues
 
-- **GitHub Pages not yet enabled / DNS not yet set.** Before the site goes live: (1) in repo
-  Settings → Pages, set Source = GitHub Actions; (2) add a Namecheap DNS record `golf` CNAME →
-  `mmarder.github.io`; (3) confirm the deploy workflow runs on push and the custom domain verifies.
+- **Custom domain deferred.** Site currently lives at the project-Pages subpath
+  (https://mmarder.github.io/golfbuddy/). Switching to `golf.mardr.com` later is the documented
+  change in the Overview section (config `site`/`base`, `public/CNAME`, Namecheap DNS).
 - Practice-area pages contain placeholder content only — real club notes and lesson learnings to be
   written into `src/content/areas/*.md`.
 - Light theme is hardcoded (`data-theme="light"`); no dark-mode toggle yet.

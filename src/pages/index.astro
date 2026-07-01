@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/paths';
 
 const areas = (await getCollection('areas')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -12,7 +13,7 @@ const areas = (await getCollection('areas')).sort((a, b) => a.data.order - b.dat
   </header>
 
   <div class="flex flex-col gap-3">
-    <a href="/drills/" class="card bg-primary text-primary-content shadow-sm transition active:scale-[0.99]">
+    <a href={withBase('drills/')} class="card bg-primary text-primary-content shadow-sm transition active:scale-[0.99]">
       <div class="card-body flex-row items-center gap-4 p-5">
         <span class="text-3xl" aria-hidden="true">🔁</span>
         <div>
@@ -25,7 +26,7 @@ const areas = (await getCollection('areas')).sort((a, b) => a.data.order - b.dat
     {
       areas.map((area) => (
         <a
-          href={`/${area.id}/`}
+          href={withBase(`${area.id}/`)}
           class="card bg-base-100 shadow-sm transition active:scale-[0.99]"
         >
           <div class="card-body flex-row items-center gap-4 p-5">
