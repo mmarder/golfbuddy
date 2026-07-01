@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export const getStaticPaths = (async () => {
+  const areas = await getCollection('areas');
+  return areas.map((entry) => ({ params: { area: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={`${entry.data.title} · GolfBuddy`} description={entry.data.summary}>
+  <header class="mb-4">
+    <h1 class="flex items-center gap-2 text-2xl font-bold">
+      <span aria-hidden="true">{entry.data.icon}</span>
+      <span>{entry.data.title}</span>
+    </h1>
+    <p class="text-base-content/70">{entry.data.summary}</p>
+  </header>
+
+  <article class="prose prose-sm max-w-none">
+    <Content />
+  </article>
+</BaseLayout>

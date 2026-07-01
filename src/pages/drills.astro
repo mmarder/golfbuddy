@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Checklist from '../components/Checklist.astro';
+
+const drills = (await getCollection('drills')).sort((a, b) => a.data.order - b.data.order);
+const items = drills.map((d) => ({ id: d.data.id, title: d.data.title, detail: d.data.detail }));
+---
+
+<BaseLayout title="Daily Drills · GolfBuddy" description="Core-swing drills to run every day.">
+  <header class="mb-5">
+    <h1 class="text-2xl font-bold">🔁 Daily Drills</h1>
+    <p class="text-base-content/70">Work through these before or instead of a range session.</p>
+  </header>
+
+  <Checklist items={items} />
+</BaseLayout>

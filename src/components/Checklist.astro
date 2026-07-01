@@ -1,0 +1,130 @@
+---
+interface DrillItem {
+  id: string;
+  title: string;
+  detail?: string;
+}
+
+interface Props {
+  items: DrillItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length === 0 ? (
+    <div class="alert" role="status">
+      <span>No drills yet — add some in <code>src/content/drills.json</code>.</span>
+    </div>
+  ) : (
+    <div data-checklist>
+      <div class="mb-4 flex items-center gap-3">
+        <progress
+          class="progress progress-primary flex-1"
+          data-progress-bar
+          value="0"
+          max="100"
+          aria-label="Drills completed"
+        />
+        <span class="text-sm font-medium tabular-nums text-base-content/70" data-progress-text>
+          0 / {items.length}
+        </span>
+      </div>
+
+      <ul class="flex flex-col gap-2">
+        {items.map((item) => (
+          <li>
+            <label class="flex cursor-pointer items-start gap-3 rounded-box bg-base-100 p-4 shadow-sm">
+              <input
+                type="checkbox"
+                class="checkbox checkbox-primary mt-0.5 shrink-0"
+                data-drill-id={item.id}
+              />
+              <span class="flex flex-col">
+                <span class="font-semibold">{item.title}</span>
+                {item.detail && (
+                  <span class="text-sm text-base-content/70">{item.detail}</span>
+                )}
+              </span>
+            </label>
+          </li>
+        ))}
+      </ul>
+
+      <button type="button" class="btn btn-outline mt-5" data-reset>
+        Reset checklist
+      </button>
+    </div>
+  )
+}
+
+<script>
+  import {
+    deserialize,
+    serialize,
+    toggle,
+    reset,
+    progress,
+    type ChecklistState,
+  } from '../lib/checklist-state';
+
+  const STORAGE_KEY = 'golfbuddy.drills';
+
+  function load(): ChecklistState {
+    try {
+      return deserialize(localStorage.getItem(STORAGE_KEY));
+    } catch {
+      // localStorage can throw (private mode / disabled). Fall back to empty.
+      return { checked: [] };
+    }
+  }
+
+  function save(state: ChecklistState): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, serialize(state));
+    } catch {
+      // Persistence unavailable — the UI still works for this session.
+    }
+  }
+
+  function init(root: HTMLElement): void {
+    const boxes = Array.from(
+      root.querySelectorAll<HTMLInputElement>('input[data-drill-id]'),
+    );
+    const bar = root.querySelector<HTMLProgressElement>('[data-progress-bar]');
+    const text = root.querySelector<HTMLElement>('[data-progress-text]');
+    const resetBtn = root.querySelector<HTMLButtonElement>('[data-reset]');
+    const allIds = boxes.map((b) => b.dataset.drillId!).filter(Boolean);
+
+    let state = load();
+
+    function paint(): void {
+      for (const box of boxes) {
+        box.checked = state.checked.includes(box.dataset.drillId!);
+      }
+      const { done, total, percent } = progress(state, allIds);
+      if (bar) bar.value = percent;
+      if (text) text.textContent = `${done} / ${total}`;
+    }
+
+    for (const box of boxes) {
+      box.addEventListener('change', () => {
+        state = toggle(state, box.dataset.drillId!);
+        save(state);
+        paint();
+      });
+    }
+
+    resetBtn?.addEventListener('click', () => {
+      state = reset();
+      save(state);
+      paint();
+    });
+
+    paint();
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-checklist]');
+  if (root) init(root);
+</script>

@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const areas = (await getCollection('areas')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="GolfBuddy">
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold">GolfBuddy</h1>
+    <p class="mt-1 text-base-content/70">Your practice notes and daily drills, in one tap.</p>
+  </header>
+
+  <div class="flex flex-col gap-3">
+    <a href="/drills/" class="card bg-primary text-primary-content shadow-sm transition active:scale-[0.99]">
+      <div class="card-body flex-row items-center gap-4 p-5">
+        <span class="text-3xl" aria-hidden="true">🔁</span>
+        <div>
+          <h2 class="card-title">Daily Drills</h2>
+          <p class="text-sm opacity-90">Core-swing routine to run every day.</p>
+        </div>
+      </div>
+    </a>
+
+    {
+      areas.map((area) => (
+        <a
+          href={`/${area.id}/`}
+          class="card bg-base-100 shadow-sm transition active:scale-[0.99]"
+        >
+          <div class="card-body flex-row items-center gap-4 p-5">
+            <span class="text-3xl" aria-hidden="true">
+              {area.data.icon}
+            </span>
+            <div>
+              <h2 class="card-title">{area.data.title}</h2>
+              <p class="text-sm text-base-content/70">{area.data.summary}</p>
+            </div>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

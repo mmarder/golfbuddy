@@ -1,0 +1,36 @@
+{
+  "name": "golfbuddy",
+  "version": "1.0.0",
+  "description": "Personal mobile-first static site for golf practice: daily drills, long/short game, and putting notes.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "check": "astro check && vitest run && astro build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmarder/golfbuddy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmarder/golfbuddy/issues"
+  },
+  "homepage": "https://github.com/mmarder/golfbuddy#readme",
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.2",
+    "astro": "^7.0.4",
+    "daisyui": "^5.6.6",
+    "tailwindcss": "^4.3.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}
