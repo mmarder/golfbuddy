@@ -23,13 +23,17 @@ accounts, no personal data.
 **Deployment:** GitHub Pages, built and deployed by the GitHub Actions workflow in
 `.github/workflows/deploy.yml` (push to `main` → build with `withastro/action` → deploy to Pages).
 Pages is enabled with Source = GitHub Actions.
-**Live URL:** https://mmarder.github.io/golfbuddy/ (project Pages). Served from the `/golfbuddy`
-subpath, so `astro.config.mjs` sets `base: '/golfbuddy'` and internal links go through
-`withBase()` (`src/lib/paths.ts`).
-**Custom domain (deferred):** `golf.mardr.com` is planned but not set up yet. To switch: set
-`site: 'https://golf.mardr.com'`, remove `base` from `astro.config.mjs`, re-add `public/CNAME`
-containing `golf.mardr.com`, and add a Namecheap DNS record (`golf` CNAME → `mmarder.github.io`).
-`withBase()` makes the link changes automatic.
+**Live URL:** https://golf.mardr.com/ (custom domain, served from the root). `astro.config.mjs`
+sets `site: 'https://golf.mardr.com'` with **no** `base`, so `withBase()` (`src/lib/paths.ts`)
+resolves to an empty base. The domain is wired up by three things: `public/CNAME` (containing
+`golf.mardr.com`, copied verbatim into the build output), a Namecheap DNS record
+(`golf` CNAME → `mmarder.github.io`), and the GitHub Pages custom-domain setting (Enforce HTTPS on).
+Note: saving the custom domain in the Pages UI auto-commits a **root** `CNAME` file, but the
+Actions deploy publishes `dist/` — so only `public/CNAME` reaches the live site. The root file is
+unused; it has been removed. If the Pages UI re-creates it, it is harmless and can be deleted again.
+**Reverting to the subpath:** set `site: 'https://mmarder.github.io'`, add `base: '/golfbuddy'`,
+delete `public/CNAME`, and clear the GitHub custom-domain setting. `withBase()` makes the link
+changes automatic.
 **Repo:** https://github.com/mmarder/golfbuddy
 **Data store:** None. Fully static. The only per-device state is the two Daily Drills checklists
 (everyday / range), stored independently in the browser's `localStorage` under keys
@@ -83,7 +87,8 @@ golfbuddy/
 ├── package.json                  # scripts: dev / build / preview / test / check
 ├── .github/workflows/deploy.yml  # build + deploy to GitHub Pages
 ├── public/
-│   └── favicon.svg               # (CNAME re-added here when the custom domain is set up)
+│   ├── favicon.svg
+│   └── CNAME                     # custom domain (golf.mardr.com) — copied verbatim into build output
 └── src/
     ├── content.config.ts         # collections: `areas` (glob md) + `drills` (json) + `guides` (glob md) + `benchmarks` (json)
     ├── content/
@@ -224,9 +229,9 @@ None required (static build, no secrets).
 
 ## 11. Known Issues
 
-- **Custom domain deferred.** Site currently lives at the project-Pages subpath
-  (https://mmarder.github.io/golfbuddy/). Switching to `golf.mardr.com` later is the documented
-  change in the Overview section (config `site`/`base`, `public/CNAME`, Namecheap DNS).
+- **Custom domain is live** at https://golf.mardr.com/ (root-served). The old project-Pages URL
+  (https://mmarder.github.io/golfbuddy/) no longer serves the site. Reverting is the documented
+  change in the Overview section (config `site`/`base`, `public/CNAME`, GitHub custom-domain setting).
 - All four practice-area pages now contain real lesson content. Future lessons should be added
   directly to the relevant `src/content/areas/*.md` file.
 - Light theme is hardcoded (`data-theme="light"`); no dark-mode toggle yet.
