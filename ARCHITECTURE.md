@@ -10,8 +10,10 @@ Keeping it current is a deploy blocker.
 
 GolfBuddy is a personal, mobile-first static site for learning golf. It holds club notes and
 technique reminders captured from the owner's pro lessons across four practice areas (Fundamentals,
-Long Game, Short Game, Putting), plus a **Daily Drills** checklist — a core-swing routine to run
-every day. It is a static reference the owner opens on a phone at the range or on the green. No
+Long Game, Short Game, Putting), plus a **Practice** hub. The hub links to three sub-pages: the
+**Daily Drills** checklist (a core-swing routine to do anywhere with your clubs), a **How to
+Practice** guide, and a **Benchmarks** reference (approximate performance targets across skill
+levels). It is a static reference the owner opens on a phone at the range or on the green. No
 backend, no user accounts, no personal data.
 
 **Deployment:** GitHub Pages, built and deployed by the GitHub Actions workflow in
@@ -29,7 +31,8 @@ containing `golf.mardr.com`, and add a Namecheap DNS record (`golf` CNAME → `m
 in the browser's `localStorage` under key `golfbuddy.drills` (functional state only — no PII).
 **Error tracking:** None.
 
-**Routes:** `/`, `/drills/`, `/fundamentals/`, `/long-game/`, `/short-game/`, `/putting/`.
+**Routes:** `/`, `/practice/`, `/practice/drills/`, `/practice/how/`, `/practice/benchmarks/`,
+`/fundamentals/`, `/long-game/`, `/short-game/`, `/putting/`.
 
 **Active branches:**
 - `main` — production
@@ -75,22 +78,30 @@ golfbuddy/
 ├── public/
 │   └── favicon.svg               # (CNAME re-added here when the custom domain is set up)
 └── src/
-    ├── content.config.ts         # content collections: `areas` (glob md) + `drills` (json)
+    ├── content.config.ts         # collections: `areas` (glob md) + `drills` (json) + `guides` (glob md) + `benchmarks` (json)
     ├── content/
     │   ├── drills.json           # daily-drill list (id, title, detail, order, steps?)
-    │   └── areas/                # fundamentals.md, long-game.md, short-game.md, putting.md
+    │   ├── benchmarks.json       # skill benchmarks (putting/short-game/approach/driving × 3 levels)
+    │   ├── areas/                # fundamentals.md, long-game.md, short-game.md, putting.md
+    │   └── guides/               # how-to-practice.md
     ├── layouts/
-    │   └── BaseLayout.astro      # mobile-first shell + DaisyUI dock nav
+    │   └── BaseLayout.astro      # mobile-first shell + DaisyUI dock nav (prefix-aware active state)
     ├── components/
     │   └── Checklist.astro       # interactive checklist (localStorage + reset) + client script
     ├── lib/
     │   ├── checklist-state.ts    # PURE logic (toggle/progress/serialize/deserialize/reset)
     │   ├── checklist-state.test.ts
     │   ├── paths.ts              # PURE withBase() — prefixes internal links with Astro base
-    │   └── paths.test.ts
+    │   ├── paths.test.ts
+    │   ├── units.ts              # PURE unit conversion (feet↔m, yd↔m) + combined-format helpers
+    │   └── units.test.ts
     ├── pages/
-    │   ├── index.astro           # home hub (cards → drills + 4 areas)
-    │   ├── drills.astro          # renders <Checklist>
+    │   ├── index.astro           # home hub (cards → practice + 4 areas)
+    │   ├── practice/
+    │   │   ├── index.astro       # practice hub (cards → drills / how / benchmarks)
+    │   │   ├── drills.astro      # renders <Checklist>
+    │   │   ├── how.astro         # renders the how-to-practice guide (prose)
+    │   │   └── benchmarks.astro  # stacked benchmark cards (mobile-first, no wide tables)
     │   └── [area].astro          # dynamic route: one page per `areas` entry
     └── styles/
         └── global.css            # @import tailwindcss; @plugin typography; @plugin daisyui
@@ -112,6 +123,16 @@ No database. Content is authored as files validated at build time:
   `steps` (optional) is `{ heading: string; cues: string[] }[]` — when present, a native
   `<details>`/`<summary>` disclosure is rendered as a sibling of the checkbox label inside the
   card, so tapping the summary never toggles the checkbox.
+- **`guides`** collection — markdown files in `src/content/guides/`, entry id = filename slug
+  (`how-to-practice`). Frontmatter: `title`, `summary`, `icon?`. Body is markdown, rendered
+  prose-styled like the area pages. Same content convention (`⚠️ **Watch-out:**` blockquotes).
+- **`benchmarks`** collection — `src/content/benchmarks.json`, a single-entry array (id `main`)
+  holding approximate performance numbers across three skill levels (`beginner`, `goodAmateur`,
+  `tour`): `putting` (make-% by distance in feet), `shortGame.upAndDownPct`, `approach`
+  (proximity in feet by yardage), and `driving` (`carryYd`, `totalYd`, `fairwayPct` per level).
+  Numbers are approximate feel-guides grounded in public data (Broadie/ShotLink putting, Arccos /
+  Shot Scope / Left Rough handicap tables, PGA Tour driving averages); the page renders them as
+  ranges/approximations, converting feet↔metres and yards↔metres via `src/lib/units.ts`.
 
 **Per-device state:** `localStorage["golfbuddy.drills"]` holds `{ version: 1, checked: string[] }`
 — the ids of ticked drills. Read/written only through `checklist-state.ts` (safe-parse: any
@@ -133,6 +154,10 @@ malformed/legacy/wrong-version payload resets to empty). No personal data.
 - **`src/lib/checklist-state.ts`** — the entire testable logic layer, free of DOM/`localStorage`:
   `emptyState`, `reset`, `isChecked`, `toggle` (immutable), `progress` (ignores stale ids, no
   divide-by-zero), `serialize`, `deserialize` (safe-parse). Fully unit-tested (17 cases).
+- **`src/lib/units.ts`** — PURE, DOM-free distance conversion for the Benchmarks page:
+  `feetToMeters` (1-dp), `yardsToMeters` (whole metres), and the combined-format helpers
+  `formatFeetMeters` ("N ft / ~M m") and `formatYardsMeters` ("N yd / ~M m"). Unit-tested
+  (22 cases: known conversions, rounding, 0, and large distances).
 - **`src/components/Checklist.astro`** `<script>` — the only I/O layer: reads/writes `localStorage`
   (wrapped in try/catch for private-mode/disabled), paints the DOM, wires checkbox + reset events.
   All state transitions delegate to the pure module.
@@ -155,7 +180,8 @@ malformed/legacy/wrong-version payload resets to empty). No personal data.
 ## 8. Interfaces (API routes / functions / events)
 
 None. Static site — no API routes, functions, or server events. Routes are file-based static pages:
-`/`, `/drills/`, `/fundamentals/`, `/long-game/`, `/short-game/`, `/putting/`.
+`/`, `/practice/`, `/practice/drills/`, `/practice/how/`, `/practice/benchmarks/`,
+`/fundamentals/`, `/long-game/`, `/short-game/`, `/putting/`.
 
 ---
 

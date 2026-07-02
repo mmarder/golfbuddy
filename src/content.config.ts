@@ -51,4 +51,65 @@ const drills = defineCollection({
   }),
 });
 
-export const collections = { areas, drills };
+/**
+ * How-to guides — markdown files in `src/content/guides/`.
+ * Same conventions as `areas` (prose body, Watch-out blockquotes).
+ */
+const guides = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/guides' }),
+  schema: z.object({
+    title: z.string(),
+    /** Short one-line summary shown on hub cards. */
+    summary: z.string(),
+    /** Optional emoji shown next to the page heading. */
+    icon: z.string().optional(),
+  }),
+});
+
+/** Three-level skill benchmarks (beginner / good amateur / tour). */
+const levelValues = z.object({
+  beginner: z.number(),
+  goodAmateur: z.number(),
+  tour: z.number(),
+});
+
+const drivingLevel = z.object({
+  carryYd: z.number(),
+  totalYd: z.number(),
+  fairwayPct: z.number(),
+});
+
+/**
+ * Benchmark reference data — a single JSON array with one entry ("main")
+ * covering putting, short game, approach, and driving across three skill levels.
+ */
+const benchmarks = defineCollection({
+  loader: file('./src/content/benchmarks.json'),
+  schema: z.object({
+    id: z.string(),
+    putting: z.array(
+      z.object({
+        distanceFt: z.number(),
+        beginner: z.number(),
+        goodAmateur: z.number(),
+        tour: z.number(),
+      }),
+    ),
+    shortGame: z.object({
+      upAndDownPct: levelValues,
+    }),
+    approach: z.array(
+      z.object({
+        distanceYd: z.number(),
+        proximityFt: levelValues,
+      }),
+    ),
+    driving: z.object({
+      beginner: drivingLevel,
+      goodAmateur: drivingLevel,
+      tour: drivingLevel,
+    }),
+  }),
+});
+
+export const collections = { areas, drills, guides, benchmarks };

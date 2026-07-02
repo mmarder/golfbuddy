@@ -1,0 +1,33 @@
+[
+  {
+    "id": "main",
+    "putting": [
+      { "distanceFt": 3, "beginner": 62, "goodAmateur": 82, "tour": 96 },
+      { "distanceFt": 4, "beginner": 47, "goodAmateur": 68, "tour": 87 },
+      { "distanceFt": 5, "beginner": 35, "goodAmateur": 56, "tour": 77 },
+      { "distanceFt": 6, "beginner": 26, "goodAmateur": 45, "tour": 66 },
+      { "distanceFt": 8, "beginner": 16, "goodAmateur": 30, "tour": 50 },
+      { "distanceFt": 10, "beginner": 10, "goodAmateur": 20, "tour": 38 },
+      { "distanceFt": 15, "beginner": 5, "goodAmateur": 11, "tour": 23 },
+      { "distanceFt": 20, "beginner": 3, "goodAmateur": 7, "tour": 14 }
+    ],
+    "shortGame": {
+      "upAndDownPct": { "beginner": 25, "goodAmateur": 45, "tour": 60 }
+    },
+    "approach": [
+      {
+        "distanceYd": 100,
+        "proximityFt": { "beginner": 55, "goodAmateur": 33, "tour": 18 }
+      },
+      {
+        "distanceYd": 150,
+        "proximityFt": { "beginner": 85, "goodAmateur": 47, "tour": 23 }
+      }
+    ],
+    "driving": {
+      "beginner":    { "carryYd": 180, "totalYd": 195, "fairwayPct": 38 },
+      "goodAmateur": { "carryYd": 210, "totalYd": 230, "fairwayPct": 50 },
+      "tour":        { "carryYd": 275, "totalYd": 293, "fairwayPct": 59 }
+    }
+  }
+]
