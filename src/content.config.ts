@@ -22,6 +22,9 @@ const areas = defineCollection({
  * Daily core-swing drills — a flat list rendered as the persistent checklist.
  * Sourced from a single JSON file; each entry needs a stable `id` so ticked
  * state survives content edits.
+ *
+ * Multi-step drills render an expandable instruction list via `steps`.
+ * Simple drills (no `steps`) omit the disclosure entirely.
  */
 const drills = defineCollection({
   loader: file('./src/content/drills.json'),
@@ -32,6 +35,19 @@ const drills = defineCollection({
     detail: z.string().optional(),
     /** Sort order within the list. */
     order: z.number(),
+    /**
+     * Optional ordered steps for multi-step drills. Each step has a heading
+     * (e.g. "Position 1 — club behind shoulders") and a list of cues.
+     * When present, rendered as an expandable <details>/<summary> disclosure.
+     */
+    steps: z
+      .array(
+        z.object({
+          heading: z.string(),
+          cues: z.array(z.string()),
+        }),
+      )
+      .optional(),
   }),
 });
 

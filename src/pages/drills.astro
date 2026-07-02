@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Checklist from '../components/Checklist.astro';
 
 const drills = (await getCollection('drills')).sort((a, b) => a.data.order - b.data.order);
-const items = drills.map((d) => ({ id: d.data.id, title: d.data.title, detail: d.data.detail }));
+const items = drills.map((d) => ({ id: d.data.id, title: d.data.title, detail: d.data.detail, steps: d.data.steps }));
 ---
 
 <BaseLayout title="Daily Drills · GolfBuddy" description="Core-swing drills to run every day.">

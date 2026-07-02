@@ -1,6 +1,6 @@
 # GolfBuddy — Architecture Reference
 
-This document captures the complete state of the app as of 2026-07-01. Any developer or AI agent
+This document captures the complete state of the app as of 2026-07-02. Any developer or AI agent
 should be able to read this file and have a full mental model **without exploring the codebase**.
 Keeping it current is a deploy blocker.
 
@@ -9,10 +9,10 @@ Keeping it current is a deploy blocker.
 ## 1. Overview
 
 GolfBuddy is a personal, mobile-first static site for learning golf. It holds club notes and
-technique reminders captured from the owner's pro lessons across three practice areas (Long Game,
-Short Game, Putting), plus a **Daily Drills** checklist — a core-swing routine to run every day. It
-is a static reference the owner opens on a phone at the range or on the green. No backend, no user
-accounts, no personal data.
+technique reminders captured from the owner's pro lessons across four practice areas (Fundamentals,
+Long Game, Short Game, Putting), plus a **Daily Drills** checklist — a core-swing routine to run
+every day. It is a static reference the owner opens on a phone at the range or on the green. No
+backend, no user accounts, no personal data.
 
 **Deployment:** GitHub Pages, built and deployed by the GitHub Actions workflow in
 `.github/workflows/deploy.yml` (push to `main` → build with `withastro/action` → deploy to Pages).
@@ -28,6 +28,8 @@ containing `golf.mardr.com`, and add a Namecheap DNS record (`golf` CNAME → `m
 **Data store:** None. Fully static. The only per-device state is the Daily Drills checklist, stored
 in the browser's `localStorage` under key `golfbuddy.drills` (functional state only — no PII).
 **Error tracking:** None.
+
+**Routes:** `/`, `/drills/`, `/fundamentals/`, `/long-game/`, `/short-game/`, `/putting/`.
 
 **Active branches:**
 - `main` — production
@@ -75,8 +77,8 @@ golfbuddy/
 └── src/
     ├── content.config.ts         # content collections: `areas` (glob md) + `drills` (json)
     ├── content/
-    │   ├── drills.json           # daily-drill list (id, title, detail, order)
-    │   └── areas/                # long-game.md, short-game.md, putting.md
+    │   ├── drills.json           # daily-drill list (id, title, detail, order, steps?)
+    │   └── areas/                # fundamentals.md, long-game.md, short-game.md, putting.md
     ├── layouts/
     │   └── BaseLayout.astro      # mobile-first shell + DaisyUI dock nav
     ├── components/
@@ -87,7 +89,7 @@ golfbuddy/
     │   ├── paths.ts              # PURE withBase() — prefixes internal links with Astro base
     │   └── paths.test.ts
     ├── pages/
-    │   ├── index.astro           # home hub (cards → drills + 3 areas)
+    │   ├── index.astro           # home hub (cards → drills + 4 areas)
     │   ├── drills.astro          # renders <Checklist>
     │   └── [area].astro          # dynamic route: one page per `areas` entry
     └── styles/
@@ -101,11 +103,15 @@ golfbuddy/
 No database. Content is authored as files validated at build time:
 
 - **`areas`** collection — markdown files in `src/content/areas/`, entry id = filename slug
-  (`long-game`, `short-game`, `putting`). Frontmatter: `title`, `summary`, `icon`, `order`. Body is
-  markdown (Clubs + Lesson learnings sections).
-- **`drills`** collection — `src/content/drills.json`, an array of `{ id, title, detail?, order }`.
-  The `id` is the stable key used for checklist persistence, so editing/reordering drills does not
-  lose ticked state.
+  (`fundamentals`, `long-game`, `short-game`, `putting`). Frontmatter: `title`, `summary`, `icon`,
+  `order`. Body is markdown. Ordered by `order` on the home hub (Fundamentals=1, Long Game=2,
+  Short Game=3, Putting=4). Content convention: `⚠️ **Watch-out:**` blockquotes flag common errors.
+- **`drills`** collection — `src/content/drills.json`, an array of
+  `{ id, title, detail?, order, steps? }`. The `id` is the stable key used for checklist
+  persistence, so editing/reordering drills does not lose ticked state.
+  `steps` (optional) is `{ heading: string; cues: string[] }[]` — when present, a native
+  `<details>`/`<summary>` disclosure is rendered as a sibling of the checkbox label inside the
+  card, so tapping the summary never toggles the checkbox.
 
 **Per-device state:** `localStorage["golfbuddy.drills"]` holds `{ version: 1, checked: string[] }`
 — the ids of ticked drills. Read/written only through `checklist-state.ts` (safe-parse: any
@@ -149,7 +155,7 @@ malformed/legacy/wrong-version payload resets to empty). No personal data.
 ## 8. Interfaces (API routes / functions / events)
 
 None. Static site — no API routes, functions, or server events. Routes are file-based static pages:
-`/`, `/drills/`, `/long-game/`, `/short-game/`, `/putting/`.
+`/`, `/drills/`, `/fundamentals/`, `/long-game/`, `/short-game/`, `/putting/`.
 
 ---
 
@@ -170,6 +176,6 @@ None required (static build, no secrets).
 - **Custom domain deferred.** Site currently lives at the project-Pages subpath
   (https://mmarder.github.io/golfbuddy/). Switching to `golf.mardr.com` later is the documented
   change in the Overview section (config `site`/`base`, `public/CNAME`, Namecheap DNS).
-- Practice-area pages contain placeholder content only — real club notes and lesson learnings to be
-  written into `src/content/areas/*.md`.
+- All four practice-area pages now contain real lesson content. Future lessons should be added
+  directly to the relevant `src/content/areas/*.md` file.
 - Light theme is hardcoded (`data-theme="light"`); no dark-mode toggle yet.

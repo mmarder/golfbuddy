@@ -1,18 +1,26 @@
 ---
 title: Putting
-summary: On the green — reading pace and line, and a repeatable stroke.
+summary: A reverse-overlap grip and a straight, no-rotation stroke.
 icon: "🥅"
-order: 3
+order: 4
 ---
 
-## Clubs
+## Setup
 
-_Notes on your putter and setup — grip style, ball position, eye line._
+- Feet shoulder-width or a bit less apart.
+- Posture is top-down, with your eyes over the top of the ball.
 
-- **Putter** — …
+## Grip (reverse overlap)
 
-## Lesson learnings
+- Left hand grips with the thumb on top of the grip.
+- Right hand below the left hand, on the club.
+- The left-hand index finger sits on top of the right-hand small finger.
 
-_Cues and corrections from your lessons. Keep them short and scannable._
+## Stroke
 
-- …
+- The club moves only right → left, with no face rotation — a straight face through the ball gives a straight roll.
+
+## How to practice
+
+- Short putts (3–6 ft) for confidence.
+- Lag putts (long ones) for distance control.

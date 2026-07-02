@@ -1,32 +1,55 @@
 [
   {
-    "id": "grip-check",
-    "title": "Grip check",
-    "detail": "Neutral grip, see two knuckles on the lead hand, thumbs pointing just right of centre. Ten slow re-grips.",
-    "order": 1
+    "id": "rotation-warmup",
+    "title": "Rotation warm-up",
+    "detail": "3-position turn drill to groove the swing motion before you start hitting.",
+    "order": 1,
+    "steps": [
+      {
+        "heading": "Body motion (same for all three positions)",
+        "cues": [
+          "Stand shoulder-width apart; left foot turned out slightly toward the target.",
+          "Head and eyes stay forward — no turning.",
+          "Turn your shoulders back to the right; lower slightly through the knees.",
+          "Turn through the hips forward and rotate to the front.",
+          "Right foot turns and finishes up on the toes.",
+          "Weight starts on the back foot and ends on the front foot.",
+          "Go slowly — a few reps at each position."
+        ]
+      },
+      {
+        "heading": "Position 1 — club behind the shoulders",
+        "cues": [
+          "Hold the club behind your shoulders, one hand beside each shoulder, thumbs toward your body.",
+          "Run through the body motion above."
+        ]
+      },
+      {
+        "heading": "Position 2 — club in front, above the belt line",
+        "cues": [
+          "Move the club to the front, just above the belt line.",
+          "Keep it level — it should only turn around your body, not move up and down."
+        ]
+      },
+      {
+        "heading": "Position 3 — club behind the body, above the belt line",
+        "cues": [
+          "Move the club behind your body, above the belt line.",
+          "Same rotation, same level turn."
+        ]
+      }
+    ]
   },
   {
-    "id": "setup-posture",
-    "title": "Setup & posture",
-    "detail": "Athletic hinge from the hips, soft knees, arms hanging under the shoulders. Check alignment to a target line.",
+    "id": "grip-check",
+    "title": "Grip check",
+    "detail": "Left hand like a handshake, club to the base of the small finger, hands interlocked. Looking down: two knuckles of the left hand, and the right-hand V pointing toward your right arm.",
     "order": 2
   },
   {
-    "id": "slow-swings",
-    "title": "Slow-motion swings",
-    "detail": "Ten swings at half speed, feeling the takeaway, top position, and a balanced finish held for three seconds.",
+    "id": "half-to-full",
+    "title": "Half → full swings",
+    "detail": "Start with half swings, then build to full. Left arm straight, right arm folds; turn through the shoulders. Watch that the club doesn't go too far behind your back.",
     "order": 3
-  },
-  {
-    "id": "mirror-top",
-    "title": "Mirror — top of backswing",
-    "detail": "Check the top position in a mirror: lead arm across the chest, club roughly on plane, weight into the trail side.",
-    "order": 4
-  },
-  {
-    "id": "tempo-count",
-    "title": "Tempo count",
-    "detail": "Swing to a 3:1 rhythm (long back, quick through). Twenty reps counting out loud.",
-    "order": 5
   }
 ]

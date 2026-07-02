@@ -1,8 +1,14 @@
 ---
+interface DrillStep {
+  heading: string;
+  cues: string[];
+}
+
 interface DrillItem {
   id: string;
   title: string;
   detail?: string;
+  steps?: DrillStep[];
 }
 
 interface Props {
@@ -34,8 +40,8 @@ const { items } = Astro.props;
 
       <ul class="flex flex-col gap-2">
         {items.map((item) => (
-          <li>
-            <label class="flex cursor-pointer items-start gap-3 rounded-box bg-base-100 p-4 shadow-sm">
+          <li class="rounded-box bg-base-100 shadow-sm overflow-hidden">
+            <label class="flex cursor-pointer items-start gap-3 p-4">
               <input
                 type="checkbox"
                 class="checkbox checkbox-primary mt-0.5 shrink-0"
@@ -48,6 +54,28 @@ const { items } = Astro.props;
                 )}
               </span>
             </label>
+            {item.steps && item.steps.length > 0 && (
+              <details class="border-t border-base-200">
+                <summary class="steps-summary flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-primary select-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="steps-chevron h-4 w-4 shrink-0 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                  Show steps
+                </summary>
+                <div class="px-4 pb-4 pt-2 flex flex-col gap-4">
+                  {item.steps.map((step) => (
+                    <div>
+                      <p class="text-xs font-semibold uppercase tracking-wide text-base-content/60 mb-1">{step.heading}</p>
+                      <ul class="list-disc pl-4 flex flex-col gap-0.5">
+                        {step.cues.map((cue) => (
+                          <li class="text-sm text-base-content/70">{cue}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
           </li>
         ))}
       </ul>
@@ -128,3 +156,10 @@ const { items } = Astro.props;
   const root = document.querySelector<HTMLElement>('[data-checklist]');
   if (root) init(root);
 </script>
+
+<style>
+  /* Rotate chevron when the steps disclosure is open */
+  details[open] .steps-chevron {
+    transform: rotate(180deg);
+  }
+</style>
