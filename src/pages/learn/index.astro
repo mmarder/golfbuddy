@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = await getCollection('guides');
+const guide = entries.find((e) => e.id === 'golf-basics');
+if (!guide) throw new Error('golf-basics guide not found in guides collection');
+const { Content } = await render(guide);
+---
+
+<BaseLayout title={`${guide.data.title} · GolfBuddy`} description={guide.data.summary}>
+  <header class="mb-4">
+    <h1 class="flex items-center gap-2 text-2xl font-bold">
+      {guide.data.icon && <span aria-hidden="true">{guide.data.icon}</span>}
+      <span>{guide.data.title}</span>
+    </h1>
+    <p class="text-base-content/70">{guide.data.summary}</p>
+  </header>
+
+  <article class="prose prose-sm max-w-none">
+    <Content />
+  </article>
+</BaseLayout>

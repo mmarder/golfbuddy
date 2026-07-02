@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BenchmarkBlock from '../components/BenchmarkBlock.astro';
 
 export const getStaticPaths = (async () => {
   const areas = await getCollection('areas');
@@ -10,6 +11,16 @@ export const getStaticPaths = (async () => {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+/** Maps each area page to the benchmark section(s) it should show, if any. */
+const benchmarkSection: Record<string, 'putting' | 'shortGame' | 'long' | null> = {
+  putting: 'putting',
+  'short-game': 'shortGame',
+  'long-game': 'long',
+  fundamentals: null,
+};
+
+const section = benchmarkSection[entry.id] ?? null;
 ---
 
 <BaseLayout title={`${entry.data.title} · GolfBuddy`} description={entry.data.summary}>
@@ -24,4 +35,6 @@ const { Content } = await render(entry);
   <article class="prose prose-sm max-w-none">
     <Content />
   </article>
+
+  {section && <BenchmarkBlock section={section} />}
 </BaseLayout>

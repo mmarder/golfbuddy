@@ -1,0 +1,166 @@
+---
+import { getCollection } from 'astro:content';
+import { feetToMeters, yardsToMeters } from '../lib/units';
+
+interface Props {
+  /** Which benchmark block(s) to render for this practice area. */
+  section: 'putting' | 'shortGame' | 'long';
+}
+
+const { section } = Astro.props;
+
+const entries = await getCollection('benchmarks');
+const entry = entries.find((e) => e.id === 'main');
+if (!entry) throw new Error('benchmarks collection entry "main" not found in benchmarks.json');
+const { putting, shortGame, approach, driving } = entry.data;
+
+const levels = [
+  { key: 'beginner' as const,    label: 'Beginner',      color: '' },
+  { key: 'goodAmateur' as const, label: 'Good amateur',  color: 'text-success' },
+  { key: 'tour' as const,        label: 'Tour',          color: 'text-primary' },
+] as const;
+
+const drivingLevels = [
+  { key: 'beginner' as const,    label: 'Beginner',                  subtitle: '20+ handicap',        color: '' },
+  { key: 'goodAmateur' as const, label: 'Good amateur',              subtitle: '5–10 handicap',       color: 'text-success' },
+  { key: 'tour' as const,        label: 'Tour',                      subtitle: 'PGA Tour average',    color: 'text-primary' },
+] as const;
+---
+
+<section class="mt-8 not-prose">
+  <h2 class="mb-3 text-lg font-bold">Benchmarks — where you stand</h2>
+
+  <div role="note" class="alert alert-info mb-6 text-sm">
+    <span>These are approximate feel-guides, not exact targets. Real performance varies with course conditions, nerves, and how well you slept.</span>
+  </div>
+
+  <!-- Level legend -->
+  <div class="mb-5 flex flex-wrap gap-2 text-sm">
+    <span class="badge badge-outline">Beginner (20+ hdcp)</span>
+    <span class="badge badge-outline badge-success">Good amateur (5–10 hdcp)</span>
+    <span class="badge badge-outline badge-primary">Tour</span>
+  </div>
+
+  {
+    section === 'putting' && (
+      <section class="mb-8">
+        <h3 class="mb-1 text-lg font-bold">Putting — make %</h3>
+        <p class="mb-3 text-sm text-base-content/70">
+          Make % = how often a putt from this distance drops. Even tour pros only hole about 1 in 7
+          from 20 ft — from outside 6 ft, two-putting is a good result.
+        </p>
+        <div class="flex flex-col gap-2">
+          {putting.map((row) => (
+            <div class="rounded-box bg-base-100 shadow-sm">
+              <div class="p-4">
+                <p class="mb-2 font-semibold">
+                  {row.distanceFt} ft&thinsp;/&thinsp;~{feetToMeters(row.distanceFt)} m
+                </p>
+                <div class="grid grid-cols-3 gap-1">
+                  {levels.map((lv) => (
+                    <div class="text-center">
+                      <p class="text-xs text-base-content/60">{lv.label}</p>
+                      <p class={`text-xl font-bold ${lv.color}`}>{row[lv.key]}%</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    section === 'shortGame' && (
+      <section class="mb-8">
+        <h3 class="mb-1 text-lg font-bold">Short game — up-and-down %</h3>
+        <p class="mb-3 text-sm text-base-content/70">
+          Up-and-down (a.k.a. greenside scramble) means getting the ball in the hole in just two
+          shots from near the green: one chip or pitch on, one putt in. This measures how often you
+          save par after missing the green.
+        </p>
+        <div class="rounded-box bg-base-100 shadow-sm">
+          <div class="p-4">
+            <p class="mb-2 font-semibold">Greenside scramble (within ~30 yd of the green)</p>
+            <div class="grid grid-cols-3 gap-1">
+              {levels.map((lv) => (
+                <div class="text-center">
+                  <p class="text-xs text-base-content/60">{lv.label}</p>
+                  <p class={`text-xl font-bold ${lv.color}`}>{shortGame.upAndDownPct[lv.key]}%</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    section === 'long' && (
+      <Fragment>
+        <section class="mb-8">
+          <h3 class="mb-1 text-lg font-bold">Approach — average proximity</h3>
+          <p class="mb-3 text-sm text-base-content/70">Proximity = how close your shot finishes to the pin, in feet. Lower is better.</p>
+          <div class="flex flex-col gap-2">
+            {approach.map((row) => (
+              <div class="rounded-box bg-base-100 shadow-sm">
+                <div class="p-4">
+                  <p class="mb-2 font-semibold">
+                    {row.distanceYd} yd&thinsp;/&thinsp;~{yardsToMeters(row.distanceYd)} m
+                  </p>
+                  <div class="grid grid-cols-3 gap-1">
+                    {levels.map((lv) => (
+                      <div class="text-center">
+                        <p class="text-xs text-base-content/60">{lv.label}</p>
+                        <p class={`text-xl font-bold ${lv.color}`}>{row.proximityFt[lv.key]} ft</p>
+                        <p class="text-xs text-base-content/50">~{feetToMeters(row.proximityFt[lv.key])} m</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="mb-1 text-lg font-bold">Driving</h3>
+          <p class="mb-3 text-sm text-base-content/70">
+            Carry = distance in the air; total adds the roll after landing. Fairways hit = the % of
+            tee shots that finish in the short grass.
+          </p>
+          <div class="flex flex-col gap-2">
+            {drivingLevels.map((lv) => {
+              const d = driving[lv.key];
+              return (
+                <div class="rounded-box bg-base-100 shadow-sm">
+                  <div class="p-4">
+                    <p class={`mb-1 font-semibold ${lv.color}`}>{lv.label}</p>
+                    <p class="mb-3 text-xs text-base-content/60">{lv.subtitle}</p>
+                    <div class="flex flex-col gap-1 text-sm">
+                      <div class="flex justify-between">
+                        <span class="text-base-content/70">Carry</span>
+                        <span class="font-medium">~{d.carryYd} yd / ~{yardsToMeters(d.carryYd)} m</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-base-content/70">Total distance</span>
+                        <span class="font-medium">~{d.totalYd} yd / ~{yardsToMeters(d.totalYd)} m</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-base-content/70">Fairways hit</span>
+                        <span class="font-medium">~{d.fairwayPct}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </Fragment>
+    )
+  }
+</section>

@@ -13,9 +13,15 @@ interface DrillItem {
 
 interface Props {
   items: DrillItem[];
+  /**
+   * localStorage key this instance persists to. Required so multiple
+   * `<Checklist>` instances on one page (e.g. everyday / range drills)
+   * keep independent, non-colliding state.
+   */
+  storageKey: string;
 }
 
-const { items } = Astro.props;
+const { items, storageKey } = Astro.props;
 ---
 
 {
@@ -24,7 +30,7 @@ const { items } = Astro.props;
       <span>No drills yet — add some in <code>src/content/drills.json</code>.</span>
     </div>
   ) : (
-    <div data-checklist>
+    <div data-checklist data-storage-key={storageKey}>
       <div class="mb-4 flex items-center gap-3">
         <progress
           class="progress progress-primary flex-1"
@@ -97,26 +103,27 @@ const { items } = Astro.props;
     type ChecklistState,
   } from '../lib/checklist-state';
 
-  const STORAGE_KEY = 'golfbuddy.drills';
+  const DEFAULT_STORAGE_KEY = 'golfbuddy.drills';
 
-  function load(): ChecklistState {
+  function load(storageKey: string): ChecklistState {
     try {
-      return deserialize(localStorage.getItem(STORAGE_KEY));
+      return deserialize(localStorage.getItem(storageKey));
     } catch {
       // localStorage can throw (private mode / disabled). Fall back to empty.
       return { checked: [] };
     }
   }
 
-  function save(state: ChecklistState): void {
+  function save(storageKey: string, state: ChecklistState): void {
     try {
-      localStorage.setItem(STORAGE_KEY, serialize(state));
+      localStorage.setItem(storageKey, serialize(state));
     } catch {
       // Persistence unavailable — the UI still works for this session.
     }
   }
 
   function init(root: HTMLElement): void {
+    const storageKey = root.dataset.storageKey || DEFAULT_STORAGE_KEY;
     const boxes = Array.from(
       root.querySelectorAll<HTMLInputElement>('input[data-drill-id]'),
     );
@@ -125,7 +132,7 @@ const { items } = Astro.props;
     const resetBtn = root.querySelector<HTMLButtonElement>('[data-reset]');
     const allIds = boxes.map((b) => b.dataset.drillId!).filter(Boolean);
 
-    let state = load();
+    let state = load(storageKey);
 
     function paint(): void {
       for (const box of boxes) {
@@ -139,22 +146,22 @@ const { items } = Astro.props;
     for (const box of boxes) {
       box.addEventListener('change', () => {
         state = toggle(state, box.dataset.drillId!);
-        save(state);
+        save(storageKey, state);
         paint();
       });
     }
 
     resetBtn?.addEventListener('click', () => {
       state = reset();
-      save(state);
+      save(storageKey, state);
       paint();
     });
 
     paint();
   }
 
-  const root = document.querySelector<HTMLElement>('[data-checklist]');
-  if (root) init(root);
+  const roots = document.querySelectorAll<HTMLElement>('[data-checklist]');
+  for (const root of roots) init(root);
 </script>
 
 <style>

@@ -19,7 +19,8 @@ const areas = defineCollection({
 });
 
 /**
- * Daily core-swing drills — a flat list rendered as the persistent checklist.
+ * Core-swing drills — a flat list split into two independent checklists by
+ * `category`: `everyday` (no ball needed) and `range` (hitting balls).
  * Sourced from a single JSON file; each entry needs a stable `id` so ticked
  * state survives content edits.
  *
@@ -33,6 +34,12 @@ const drills = defineCollection({
     title: z.string(),
     /** Optional cue / how-to shown under the drill title. */
     detail: z.string().optional(),
+    /**
+     * Which practice split this drill belongs to: `everyday` drills need no
+     * ball (groove the motion anywhere), `range` drills are done hitting
+     * balls at the range. Each split renders as its own checklist.
+     */
+    category: z.enum(['everyday', 'range']),
     /** Sort order within the list. */
     order: z.number(),
     /**

@@ -4,21 +4,36 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Checklist from '../../components/Checklist.astro';
 import { withBase } from '../../lib/paths';
 
-const drills = (await getCollection('drills')).sort((a, b) => a.data.order - b.data.order);
-const items = drills.map((d) => ({
-  id: d.data.id,
-  title: d.data.title,
-  detail: d.data.detail,
-  steps: d.data.steps,
-}));
+const drills = await getCollection('drills');
+const byOrder = (a: (typeof drills)[number], b: (typeof drills)[number]) => a.data.order - b.data.order;
+const toItems = (list: typeof drills) =>
+  list.map((d) => ({
+    id: d.data.id,
+    title: d.data.title,
+    detail: d.data.detail,
+    steps: d.data.steps,
+  }));
+
+const everydayItems = toItems(drills.filter((d) => d.data.category === 'everyday').sort(byOrder));
+const rangeItems = toItems(drills.filter((d) => d.data.category === 'range').sort(byOrder));
 ---
 
-<BaseLayout title="Daily Drills · GolfBuddy" description="Core-swing routine — do anywhere with your clubs.">
+<BaseLayout title="Daily Drills · GolfBuddy" description="Core-swing routines — some to do anywhere, some to take to the range.">
   <header class="mb-5">
     <a href={withBase('practice/')} class="mb-1 inline-block py-2 text-sm text-base-content/60 hover:text-primary">← Practice</a>
     <h1 class="text-2xl font-bold">🔁 Daily Drills</h1>
-    <p class="text-base-content/70">Core-swing routine — do anywhere with your clubs.</p>
+    <p class="text-base-content/70">Some drills need no ball at all — others you take to the range.</p>
   </header>
 
-  <Checklist items={items} />
+  <section class="mb-8">
+    <h2 class="text-lg font-bold">Without a ball — everyday</h2>
+    <p class="mb-4 text-sm text-base-content/70">Groove the motion anywhere: at home, the office, the garden. No ball needed.</p>
+    <Checklist items={everydayItems} storageKey="golfbuddy.drills.everyday" />
+  </section>
+
+  <section>
+    <h2 class="text-lg font-bold">With a ball — on the range</h2>
+    <p class="mb-4 text-sm text-base-content/70">Take it to the range and hit shots with purpose.</p>
+    <Checklist items={rangeItems} storageKey="golfbuddy.drills.range" />
+  </section>
 </BaseLayout>

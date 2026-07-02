@@ -3,6 +3,7 @@
     "id": "rotation-warmup",
     "title": "Rotation warm-up",
     "detail": "3-position turn drill to groove the swing motion before you start hitting.",
+    "category": "everyday",
     "order": 1,
     "steps": [
       {
@@ -43,13 +44,168 @@
   {
     "id": "grip-check",
     "title": "Grip check",
-    "detail": "Left hand like a handshake, club to the base of the small finger, hands interlocked. Looking down: two knuckles of the left hand, and the right-hand V pointing toward your right arm.",
-    "order": 2
+    "detail": "Build the same grip every time — it steers the clubface.",
+    "category": "everyday",
+    "order": 2,
+    "steps": [
+      {
+        "heading": "Left hand (top hand)",
+        "cues": [
+          "Lay the grip across the base of your fingers, running to the base of your small finger.",
+          "Close your hand over the top like a handshake.",
+          "Looking down you should see about two knuckles of this hand."
+        ]
+      },
+      {
+        "heading": "Right hand (bottom hand)",
+        "cues": [
+          "Fit the lifeline of your right palm over your left thumb.",
+          "Interlock the little finger of the right hand with the index finger of the left.",
+          "The 'V' made by your right thumb and index finger points up toward your right shoulder."
+        ]
+      },
+      {
+        "heading": "Pressure",
+        "cues": [
+          "Hold light — like a tube of toothpaste you don't want to squeeze.",
+          "No white knuckles; tension kills the swing."
+        ]
+      }
+    ]
   },
   {
     "id": "half-to-full",
     "title": "Half → full swings",
-    "detail": "Start with half swings, then build to full. Left arm straight, right arm folds; turn through the shoulders. Watch that the club doesn't go too far behind your back.",
-    "order": 3
+    "detail": "Build from waist-high swings to full, keeping the turn in control.",
+    "category": "everyday",
+    "order": 3,
+    "steps": [
+      {
+        "heading": "Set-up",
+        "cues": [
+          "Feet about shoulder-width, slight knee flex, arms hanging.",
+          "Weight balanced, ball in the middle of your stance."
+        ]
+      },
+      {
+        "heading": "Half swing (9 to 3)",
+        "cues": [
+          "Lead arm swings back to waist height (9 o'clock), club shaft parallel to the ground.",
+          "Turn through so your belt buckle faces the target and the club reaches 3 o'clock.",
+          "Both arms stay straight through the strike."
+        ]
+      },
+      {
+        "heading": "Three-quarter",
+        "cues": [
+          "Lengthen the backswing to shoulder height; the trail elbow folds.",
+          "Same body turn — the arms don't lift on their own."
+        ]
+      },
+      {
+        "heading": "Full swing",
+        "cues": [
+          "Turn the lead shoulder under your chin.",
+          "Stop the club before it dips down behind your back.",
+          "Finish balanced on your front foot, chest to the target.",
+          "Key cue: turn, don't lift — the club never goes past parallel behind you."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alignment-station",
+    "title": "Alignment station",
+    "detail": "Two clubs on the ground so your aim stays honest — fixes the #1 beginner miss.",
+    "category": "range",
+    "order": 4,
+    "steps": [
+      {
+        "heading": "Build the station",
+        "cues": [
+          "Lay one club on the ground pointing straight at your target — this is the ball-to-target line.",
+          "Lay a second club parallel to it, just outside your toes (like two rail tracks).",
+          "Your feet, hips and shoulders line up along the toe club — aimed parallel-LEFT of the target, not at it. Only the clubface aims at the target."
+        ]
+      },
+      {
+        "heading": "Hit 5–10 balls",
+        "cues": [
+          "Step in and match your feet to the toe club every time.",
+          "Check the clubface points at the target before each swing.",
+          "Reset your feet for every ball — don't get lazy."
+        ]
+      },
+      {
+        "heading": "Why",
+        "cues": [
+          "Most beginners aim way right and never know it.",
+          "Honest aim makes every other fault easier to see."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wedge-ladder",
+    "title": "Wedge warm-up ladder",
+    "detail": "Find the middle of the face with small swings before you go full.",
+    "category": "range",
+    "order": 5,
+    "steps": [
+      {
+        "heading": "Start small",
+        "cues": [
+          "Take a wedge or 9-iron.",
+          "Make smooth half swings (9 to 3) and hit 5 balls.",
+          "You're chasing clean contact, not distance."
+        ]
+      },
+      {
+        "heading": "Lengthen",
+        "cues": [
+          "Only once 3 in a row feel solid, go to three-quarter, then full.",
+          "If contact gets sloppy, shorten the swing again."
+        ]
+      },
+      {
+        "heading": "Work up the bag",
+        "cues": [
+          "Move up one club at a time: wedge → 7-iron → hybrid → driver.",
+          "Never start a session with the driver.",
+          "Smooth tempo beats swinging hard."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "target-routine",
+    "title": "Pick-a-target routine",
+    "detail": "Never hit an aimless ball — rehearse the routine you'll use on the course.",
+    "category": "range",
+    "order": 6,
+    "steps": [
+      {
+        "heading": "Every ball gets a target",
+        "cues": [
+          "Pick a specific target for every single shot — a flag, a distance marker, a far tree.",
+          "No lazy raking of balls without aiming."
+        ]
+      },
+      {
+        "heading": "Pre-shot routine",
+        "cues": [
+          "Stand behind the ball and look down the line to your target.",
+          "Pick a spot on the ground about a foot in front of the ball on that line; aim the clubface over it.",
+          "One practice swing, step in, one look at the target, then swing."
+        ]
+      },
+      {
+        "heading": "Reset",
+        "cues": [
+          "Step away and repeat the whole routine for the next ball.",
+          "Same routine every time builds the habit you need on the course."
+        ]
+      }
+    ]
   }
 ]
