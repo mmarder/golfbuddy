@@ -18,11 +18,13 @@ Rule of thumb: about **10 yards between consecutive clubs** — a higher number 
 
 Rule of thumb: the lower the club number (the longer the club), the **wider** the stance and the further **forward** the ball.
 
-| Club | Stance width | Weight (front / back) | Ball position |
-|---|---|---|---|
-| Driver | Widest | Stays back, behind the ball | Off the front foot |
-| Hybrid 4 | Wide | 20 / 80 | Forward of centre |
-| 7-iron | Standard | 40 / 60 | Centre |
+| Club | Stance width | Ball position (front / back) |
+|---|---|---|
+| Driver | Widest | Off the front foot |
+| Hybrid 4 | Wide | 20 / 80 |
+| 7-iron | Standard | 40 / 60 |
+
+The front / back numbers are where the ball sits between your feet — a smaller front number means the ball is further forward. So 40 / 60 (7-iron) is just forward of centre, 20 / 80 (hybrid) is well forward, and the driver is played off the front foot.
 
 ## Lesson learnings
 
