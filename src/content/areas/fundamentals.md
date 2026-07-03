@@ -12,6 +12,8 @@ order: 1
 - **Interlock** — the right-hand small finger and the left-hand index finger interlock.
 - **Checkpoints (looking down)** — you should see the first two knuckles of the left hand, and the thumb-and-index "V" of the right hand points toward your right arm.
 
+> ⚠️ **Watch-out:** two-knuckle check before every shot — looking down you must see the first two knuckles of the left hand. If you can't, the grip has rotated; reset it.
+
 > Putting uses a different grip — see **Putting**.
 
 ## Setup & stance
@@ -23,6 +25,7 @@ Base setup (long game):
 - Ball slightly forward, toward the left foot.
 - Slight knee bend; club about four fingers from the waistline.
 - Hinge forward from the hips to get into posture.
+- Stance widens with the club: wider for lower-numbered (longer) clubs, narrower for shorter ones. (See **Long Game → Setup by club**.)
 
 > ⚠️ **Watch-out:** don't sink too much into the knees. Tilt forward from the hips — over-bending the knees messes up the swing.
 

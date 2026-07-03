@@ -28,6 +28,11 @@
       "beginner":    { "carryYd": 180, "totalYd": 195, "fairwayPct": 38 },
       "goodAmateur": { "carryYd": 210, "totalYd": 230, "fairwayPct": 50 },
       "tour":        { "carryYd": 275, "totalYd": 293, "fairwayPct": 59 }
+    },
+    "drivingWomen": {
+      "beginner":    { "carryYd": 120, "totalYd": 130, "fairwayPct": 33 },
+      "goodAmateur": { "carryYd": 165, "totalYd": 180, "fairwayPct": 50 },
+      "tour":        { "carryYd": 220, "totalYd": 250, "fairwayPct": 76 }
     }
   }
 ]

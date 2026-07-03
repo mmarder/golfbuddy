@@ -116,6 +116,12 @@ const benchmarks = defineCollection({
       goodAmateur: drivingLevel,
       tour: drivingLevel,
     }),
+    /** Women's driving benchmarks — same shape as `driving`, women-only (other benchmarks are shared/skill-based). */
+    drivingWomen: z.object({
+      beginner: drivingLevel,
+      goodAmateur: drivingLevel,
+      tour: drivingLevel,
+    }),
   }),
 });
 

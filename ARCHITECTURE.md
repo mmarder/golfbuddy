@@ -1,6 +1,6 @@
 # GolfBuddy — Architecture Reference
 
-This document captures the complete state of the app as of 2026-07-02. Any developer or AI agent
+This document captures the complete state of the app as of 2026-07-03. Any developer or AI agent
 should be able to read this file and have a full mental model **without exploring the codebase**.
 Keeping it current is a deploy blocker.
 
@@ -147,11 +147,13 @@ No database. Content is authored as files validated at build time:
   holding approximate performance numbers across three skill levels (`beginner`, `goodAmateur`,
   `tour`): `putting` (make-% by distance in feet), `shortGame.upAndDownPct`, `approach`
   (proximity in feet by yardage), and `driving` (`carryYd`, `totalYd`, `fairwayPct` per level).
-  Numbers are approximate feel-guides grounded in public data (Broadie/ShotLink putting, Arccos /
-  Shot Scope / Left Rough handicap tables, PGA Tour driving averages). No longer has its own page —
-  `<BenchmarkBlock>` renders the relevant section(s) inline at the bottom of the Putting,
-  Short Game, and Long Game area pages, converting feet↔metres and yards↔metres via
-  `src/lib/units.ts`.
+  `drivingWomen` is the women's counterpart to `driving`, same shape (`carryYd`, `totalYd`,
+  `fairwayPct` per level) — it exists **only** for driving; every other benchmark (putting, short
+  game, approach) is shared/skill-based and not split by gender. Numbers are approximate
+  feel-guides grounded in public data (Broadie/ShotLink putting, Arccos / Shot Scope / Left Rough
+  handicap tables, PGA/LPGA Tour driving averages). No longer has its own page — `<BenchmarkBlock>`
+  renders the relevant section(s) inline at the bottom of the Putting, Short Game, and Long Game
+  area pages, converting feet↔metres and yards↔metres via `src/lib/units.ts`.
 
 **Per-device state:** two independent checklists, each `localStorage["golfbuddy.drills.everyday"]`
 / `localStorage["golfbuddy.drills.range"]` holding `{ version: 1, checked: string[] }` — the ids of
@@ -189,8 +191,14 @@ malformed/legacy/wrong-version payload resets to empty). No personal data. The p
 - **`src/components/BenchmarkBlock.astro`** — server-only (no `<script>`) component. Prop
   `section: 'putting' | 'shortGame' | 'long'`. Loads the `benchmarks` collection itself and renders
   the level legend + "approximate feel-guides" info alert plus the card(s) for that section
-  (`'long'` renders both Approach and Driving). Used by `[area].astro`; not used directly by any
-  page.
+  (`'long'` renders both Approach and Driving). The Driving card set includes a men/women switch —
+  a pure-CSS DaisyUI radio-tabs control (`role="tablist" .tabs.tabs-box` with two
+  `input[type=radio].tab` + `.tab-content` sibling pairs; DaisyUI's built-in CSS shows the checked
+  tab's `.tab-content` and hides the other, no `<script>` needed). Men's tab (`driving`) is checked
+  by default; the women's tab (`drivingWomen`) has the same card layout, with the Tour tier
+  subtitle "LPGA Tour average" instead of "PGA Tour average" (beginner/good-amateur subtitles are
+  shared). Only `[area].astro`'s Long Game render passes `section: 'long'`, so this switch only
+  appears on `/long-game/`. Used by `[area].astro`; not used directly by any page.
 
 ---
 
